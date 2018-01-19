@@ -1,17 +1,40 @@
-{{ $currentNode := . }}
-
+{{ $currentNode := . }} 
 {{ range .Site.Menus.main.ByWeight }}
 
 {{ $.Scratch.Set "currentMenuEntry" . }}
-<li>
-  {{ if .HasChildren }}
-    <span class="section">{{ .Name | title }}</span>
-    <ul>
-      {{ range .Children }}
-        {{ $.Scratch.Set "currentMenuEntry" . }}
-        {{ partial "nav_link" $currentNode }}
-      {{ end }}
-    </ul>
+ 
+<li>  
+  <!-- 只展开文件所的一级目录 -->
+  {{ $.Scratch.Set "inlucdePage" (hasPrefix $.Permalink (.URL | absURL | printf "%s")) }}
+  {{if .HasChildren}} 
+    {{ range .Children }}
+        {{if not ($.Scratch.Get "inlucdePage")}}
+        {{ $isCurrent := hasPrefix $.Permalink (.URL | absURL | printf "%s") }}
+        {{if $isCurrent}}
+            {{ $.Scratch.Set "inlucdePage" true }}
+        {{end}}
+        {{end}}
+    {{end}}
+  {{end}}
+  
+  {{if and .HasChildren ($.Scratch.Get "inlucdePage")}}   
+    <span class="section">{{ .Name | title }}</span> 
+      <ul>
+        {{ range .Children }}
+          {{ $.Scratch.Set "currentMenuEntry" . }}
+          {{ if .HasChildren }}
+            <span class="section">{{ .Name | title }}</span>
+            <ul>
+              {{ range .Children }}
+                {{ $.Scratch.Set "currentMenuEntry" . }}
+                {{ partial "nav_link" $currentNode }}
+              {{ end }}
+            </ul>
+          {{else}}
+            {{partial "nav_link" $currentNode }}
+          {{ end }}
+        {{ end }}
+      </ul>  
   {{ else }}
     {{ partial "nav_link" $currentNode }}
   {{ end }}
