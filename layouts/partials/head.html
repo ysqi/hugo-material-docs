@@ -3,22 +3,38 @@
   <!--[if IE 7 ]><html class="no-js ie7"><![endif]-->
   <!--[if IE 8 ]><html class="no-js ie8"><![endif]-->
   <!--[if IE 9 ]><html class="no-js ie9"><![endif]-->
-  <!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js" > <!--<![endif]-->
 
-  <head {{ with .Site.LanguageCode }}lang="{{ . }}"{{ end }}>
+  <head lang="{{ or .Site.LanguageCode "en-US"}}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=10" />
     <title>{{ .Title }}{{ if not .IsHome }} - {{ .Site.Title }}{{ end }}</title>
     {{ .Hugo.Generator }}
 
-    {{ with .Site.Params.description }}
-    <meta name="description" content="{{ . }}">
-    {{ end }}
+    {{ if .Description }}
+<meta name="description" content="{{ .Description }}"> 
+{{else }}
+<meta name="description" content="{{ .Site.Params.description }}"> 
+{{end}}
     <link rel="canonical" href="{{ .Permalink }}">
     {{ with .Site.Params.author }}
     <meta name="author" content="{{ . }}">
-    {{ end }}
+    {{ end }}  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="renderer" content="webkit"><!-- Set render engine for 360 browser --> 
+  <meta name="applicable-device" content="pc,mobile">
+  <meta name="MobileOptimized" content="width"/>
+  <meta name="HandheldFriendly" content="true"/> 
+  <meta name="mobile-web-app-capable" content="yes"> <!-- Add to homescreen for Chrome on Android -->
+  <link rel="icon" sizes="32x32" href="/images/favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="{{.Site.Title}}"/>
+  <link rel="apple-touch-icon-precomposed" href="/images/app-icon64x64.png"> 
+  <meta name="msapplication-TileImage" content="/images/app-icon128x128.png"> <!-- Tile icon for Win8 (144x144 + tile color) -->
+  <meta name="msapplication-TileColor" content="#0e90d2">
+
 
     <meta property="og:url" content="{{ .Permalink }}">
     {{ with .Site.Title }}<meta property="og:title" content="{{ . }}">{{ end }}
